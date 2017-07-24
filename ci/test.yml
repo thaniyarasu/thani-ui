@@ -1,0 +1,72 @@
+---
+platform: linux
+image_resource:
+  type: docker-image
+  source: {repository: pecigonzalo/docker-ecr, tag: latest}
+
+inputs:
+- name: thani-ui-base
+- name: thani-ui-repo
+- name: pipelines
+
+params:
+  THANI-UI-BASE:
+  THANI-UI-REPO:
+  PIPELINES:
+
+run:
+  path: /bin/bash
+  args:
+  - -exc
+  - |
+    . /root/common.sh
+    start_docker
+    docker ps
+    docker-compose version
+    echo 111=================================
+    docker load -i ./thani-ui-base/image
+    docker tag "$(cat ./thani-ui-base/image-id)" "$(cat ./thani-ui-base/repository):$(cat ./thani-ui-base/tag)"
+    export IMG="$(cat ./thani-ui-base/repository):$(cat ./thani-ui-base/tag)"
+    echo 222=================================
+    pushd thani-ui-repo
+    docker-compose run --rm ui /bin/bash ci/test.sh
+    docker-compose down
+    popd
+  dir: ""
+
+          # . /root/common.sh
+          # start_docker
+          # docker ps
+          # docker-compose version
+          # cat << EOF > "Dockerfile"
+          # FROM nginx
+          # EOF
+          # echo 111=================================
+          # docker build -t temp .
+          # docker save temp | tar -xC temp0
+          # docker version
+          # docker save --output temp1.tar temp
+          # echo 222=================================
+          # ls -lart demo
+          # echo 333=================================
+          # ls -lart temp0
+          # echo =================================
+          # cat demo/metadata.json
+          # echo =================================
+          # cp temp0/6b914bbcb89e49851990e064568dceee4d53a462f316ec36207599c12ae9ba65.json temp0/metadata.json
+          # echo =================================
+          # cat temp0/metadata.json
+          # echo =================================
+          # ls -lart temp0/repositories
+          # echo =================================
+          # pwd
+          # echo =================================
+          # ls
+          # echo =================================
+          # #docker-compose up -d
+          # docker images
+          # #docker-compose down
+          # docker-compose version
+    #docker-compose up
+    #docker-compose run --rm ui /bin/bash ci/test.sh
+    #docker-compose run --rm ui /bin/bash pub run test

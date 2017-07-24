@@ -1,0 +1,22 @@
+<h2>My Posts</h2>
+<div class="error" *ngIf="errorMessage != null">{{errorMessage}}</div>
+<div>
+  Name: <input #newPostName />
+  <button (click)="addPost(newPostName.value); newPostName.value=''">
+    Add New Post
+  </button>
+</div>
+<ul class="posts">
+  <li *ngFor="let post of posts"
+    [class.selected]="post === selectedPost"
+    (click)="onSelect(post)">
+    <span class="badge">{{post.id}}</span> {{post.name}}
+    <button class="delete-button" (click)="deletePost(post.id, $event)">x</button>
+  </li>
+</ul>
+<div *ngIf="selectedPost != null">
+  <h2>
+    {{selectedPost.name | uppercase}} is my post
+  </h2>
+  <button (click)="gotoDetail()">View Details</button>
+</div>

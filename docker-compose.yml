@@ -1,0 +1,11 @@
+version: '3'
+services:
+  ui:
+    #image: "${IMG}"
+    image: thani-ui-base:latest
+    #privileged: true
+    #command: ["/bin/bash","/app/ci/test.sh"]
+    environment:
+      - DART_ENV=test
+    volumes:
+      - .:/app
